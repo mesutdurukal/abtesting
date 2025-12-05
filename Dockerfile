@@ -8,5 +8,6 @@ FROM eclipse-temurin:11-jre
 WORKDIR /app
 COPY --from=build /app/target/*.war ./app.war
 COPY --from=build /app/target/dependency/webapp-runner.jar ./webapp-runner.jar
+ENV PORT=10000
 EXPOSE 10000
-CMD ["java", "-jar", "webapp-runner.jar", "--port", "10000", "app.war"]
+CMD java -jar webapp-runner.jar --port ${PORT} app.war

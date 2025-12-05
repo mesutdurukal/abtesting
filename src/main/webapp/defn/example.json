@@ -20,7 +20,7 @@
       }, {
         "name" : "altColor1",
         "value" : 0,
-        "description" : "indeed orange",
+        "description" : "orange",
         "payload" : {
             "map" : {
                 "bgcolor" : "#ff6600",
@@ -40,7 +40,7 @@
       }, {
         "name" : "altColor3",
         "value" : 2,
-        "description" : "indeed blue",
+        "description" : "blue",
         "payload" : {
             "map" : {
                 "bgcolor" : "#2164f3",
@@ -60,16 +60,13 @@
       }],
       "allocations" : [ {
         "rule" : null,
-        "ranges" : [ {
-          "length" : 0.25,
-          "bucketValue" : 0
-        }, {
-          "length" : 0.5,
-          "bucketValue" : -1
-        }, {
-          "length" : 0.25,
-          "bucketValue" : 2
-        } ]
+        "ranges" : [
+          {"length" : 0,  "_color" : "white",   "bucketValue" : -1},
+          {"length" : 0,  "_color" : "orange",  "bucketValue" : 0},
+          {"length" : 0,  "_color" : "magenta", "bucketValue" : 1},
+          {"length" : 0.5,  "_color" : "blue",    "bucketValue" : 2},
+          {"length" : 0.5,  "_color" : "green",   "bucketValue" : 3}
+        ]
       } ],
       "testType" : "USER"
     }

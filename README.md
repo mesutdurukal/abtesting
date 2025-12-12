@@ -1,6 +1,4 @@
-# Proctor Demo and Reference Implementation
-
-![Lifecycle](https://img.shields.io/osslifecycle/indeedeng/utilproctor-demo.svg)
+# AB Testing Demo Project
 
 This project is a reference implementation and demonstration of [Proctor](https://github.com/indeedeng/proctor), a Java-based A/B testing framework by [Indeed](http://engineering.indeed.com). It is a simple Spring MVC webapp that uses Proctor to determine what background color to set for a web application.
 
@@ -8,51 +6,16 @@ For more information, see the [Proctor documentation](http://indeedeng.github.io
 
 ## Demo Online
 
-The demo is (usually) running at [proctordemo.site](https://proctordemo.site). It loads its [test definitions](http://indeedeng.github.io/proctor/docs/terminology/#toc_4) from JSON files that can be at any URL. The examples below are self-hosted within the demo app itself. A URL parameter allows you to change the definition file.
+The demo is running [here]( https://abtesting-79wy.onrender.com/). It loads its [test definitions](http://indeedeng.github.io/proctor/docs/terminology/#toc_4) from JSON files that can be at any URL. 
+Right now it is using [this](https://gist.github.com/mesutdurukal/343755729c7ddedee28b49f3c22d7917/) json. You can override it with the `?defn=<url>` query parameter.
 
 ### Things to Try
 
-1. Testing two colors at 25% and 25%: [link](https://proctordemo.site/?defn=%2Fdefn%2Fexample.json).  Click "Show Details" and "Reset" to change your user ID and (possibly) be put in a different test bucket.
+1. Testing color variants like 50% and 50% or 100% for one color.
 
-1. Testing the same two colors at 50% and 50%: [link](https://proctordemo.site/?defn=%2Fdefn%2Fexample2.json)
-
-1. Going to 100% for one color: [link](https://proctordemo.site/?defn=%2Fdefn%2Fexample3.json)
-
-1. Using `prforceGroups` to see a different test group, regardless of allocations: [link](https://proctordemo.site/?prforceGroups=bgcolortst3)
-
-1. Reset to discard the forced group in the previous step: [link](https://proctordemo.site/reset)
+1. Using `prforceGroups` to see a different test group, regardless of allocations: [link](https://abtesting-79wy.onrender.com/?prforceGroups=bgcolortst3)
 
 1. Basing color on Android vs. iOS user agent instead of random allocation: [link](https://proctordemo.site/?defn=%2Fdefn%2Fdemo.json). If you're not on Android or iOS you won't see a background color.
-
-#### Web-Based Remote Service API
-
-An additional endpoint `/rpc` is provided in this implementation as an example of how you might implement group selection as a remote service. To use this endpoint, you must provide as least the `uid` (user ID) and `agent` (user agent) query parameters. It does not use any cookies or HTTP headers directly. It supports these parameters:
-<table>
-<tr>
-<td>Parameter</td>
-<td>Description</td>
-<td>Required?</td>
-<td>Example</td>
-</tr>
-<tr>
-<td>uid</td>
-<td>User ID for USER-based tests (can be any string)</td>
-<td>Yes</td>
-<td>8ac65ba448be45afb86706e8cab979cf</td>
-</tr>
-<tr>
-<td>agent</td>
-<td>User Agent (equivalent to User-Agent HTTP header)</td>
-<td>Yes (may be blank)</td>
-<td>Mozilla/5.0</td>
-</tr>
-<tr>
-<td>defn</td>
-<td>Definition URL</td>
-<td>No (uses default if not provided)</td>
-<td><a href="https://raw.githubusercontent.com/indeedeng/proctor-demo/master/src/main/webapp/defn/example.json">/defn/example.json</a></td>
-</tr>
-</table>
 
 ## Building and Running Demo Locally
 

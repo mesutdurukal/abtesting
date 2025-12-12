@@ -1,0 +1,71 @@
+{
+  "tests": {
+    "bgcolortst": {
+      "version": 1,
+      "description": "background color by platform",
+      "constants": {},
+      "salt": "bgcolortst",
+      "buckets": [
+        {
+          "name": "inactive",
+          "value": -1,
+          "description": "no color",
+          "payload": {
+            "map": {
+              "bgcolor": "",
+              "bucketNameFontSizePercentage": 0
+            }
+          }
+        },
+        {
+          "name": "android",
+          "value": 0,
+          "description": "magenta for Android",
+          "payload": {
+            "map": {
+              "bgcolor": "#CD29C0",
+              "bucketNameFontSizePercentage": 120
+            }
+          }
+        },
+        {
+          "name": "ios",
+          "value": 1,
+          "description": "blue for iOS",
+          "payload": {
+            "map": {
+              "bgcolor": "#2164f3",
+              "bucketNameFontSizePercentage": 120
+            }
+          }
+        }
+      ],
+      "allocations": [
+        {
+          "rule": "${userAgent.android}",
+          "ranges": [
+            {"length": 1.0, "bucketValue": 0}
+          ]
+        },
+        {
+          "rule": "${userAgent.IOS}",
+          "ranges": [
+            {"length": 1.0, "bucketValue": 1}
+          ]
+        },
+        {
+          "rule": null,
+          "ranges": [
+            {"length": 1.0, "bucketValue": -1}
+          ]
+        }
+      ],
+      "testType": "USER"
+    }
+  },
+  "audit": {
+    "version": 1,
+    "updatedBy": "mesut",
+    "updated": 1702363200000
+  }
+}

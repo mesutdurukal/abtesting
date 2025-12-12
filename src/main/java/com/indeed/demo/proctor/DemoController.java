@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -55,13 +56,15 @@ public class DemoController {
     public ModelAndView handle(@Nonnull final HttpServletRequest request,
             @Nonnull final HttpServletResponse response,
             @Nullable @CookieValue(required = false, value = USER_ID_COOKIE) String userId,
-            @Nullable @RequestHeader(required = false, value = USER_AGENT_HEADER) String userAgentHeader) {
+            @Nullable @RequestHeader(required = false, value = USER_AGENT_HEADER) String userAgentHeader,
+            @Nullable @RequestParam(required = false, value = "defn") String definitionUrl) {
         if (userId == null) {
             userId = UUID.randomUUID().toString();
             response.addCookie(new Cookie(USER_ID_COOKIE, userId));
         }
         final UserAgent userAgent = UserAgent.parseUserAgentStringSafely(userAgentHeader);
-        final ProctorGroups groups = getProctorGroups(request, response, userId, DEFAULT_DEFINITION, userAgent);
+        final String defn = (definitionUrl != null && !definitionUrl.isEmpty()) ? definitionUrl : DEFAULT_DEFINITION;
+        final ProctorGroups groups = getProctorGroups(request, response, userId, defn, userAgent);
         return new ModelAndView("demo", ImmutableMap.of("groups", groups));
     }
 }

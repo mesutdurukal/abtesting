@@ -17,6 +17,21 @@
                     "bucketNameFontSizePercentage": "longValue"
                 }
             }
+        },
+        // greeting text test (shares salt with bgcolortst)
+        "greetingtst": {
+            "buckets":{
+                "inactive":-1,
+                "hello":0,
+                "hi":1
+            },
+            "fallbackValue": -1,
+            "payload" : {
+                "type" : "map",
+                "schema" : {
+                    "greeting": "stringValue"
+                }
+            }
         }
       },
     "providedContext": {

@@ -1,0 +1,53 @@
+{
+  "tests" : {
+    "greetingtst" : {
+      "version" : 1,
+      "description" : "greeting text test",
+      "constants" : {},
+      "rule" : null,
+      "salt" : "bgcolortst",
+      "buckets" : [ {
+        "name" : "inactive",
+        "value" : -1,
+        "description" : "",
+        "payload" : {
+          "map" : {
+            "greeting" : ""
+          }
+        }
+      }, {
+        "name" : "hello",
+        "value" : 0,
+        "description" : "Hello greeting",
+        "payload" : {
+          "map" : {
+            "greeting" : "Hello"
+          }
+        }
+      }, {
+        "name" : "hi",
+        "value" : 1,
+        "description" : "Hi greeting",
+        "payload" : {
+          "map" : {
+            "greeting" : "Hi"
+          }
+        }
+      }],
+      "allocations" : [ {
+        "rule" : null,
+        "ranges" : [
+          {"length" : 0, "bucketValue" : -1},
+          {"length" : 0.5, "bucketValue" : 0},
+          {"length" : 0.5, "bucketValue" : 1}
+        ]
+      } ],
+      "testType" : "USER"
+    }
+  },
+  "audit" : {
+    "version" : 1,
+    "updatedBy" : "mesut",
+    "updated" : 1702468800000
+  }
+}

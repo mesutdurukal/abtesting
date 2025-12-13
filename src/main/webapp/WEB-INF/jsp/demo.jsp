@@ -34,7 +34,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Hello, this is an AB Testing Demo!</h1>
+<c:choose>
+            <c:when test="${not empty groups2.greetingtstPayload and not empty groups2.greetingtstPayload.greeting}">
+        <h1>${groups2.greetingtstPayload.greeting}, this is an AB Testing Demo!</h1>
+            </c:when>
+            <c:otherwise>
+        <h1>Welcome, this is an AB Testing Demo!</h1>
+            </c:otherwise>
+        </c:choose>
     </div>
     <script>
         setTimeout(function() { location.reload(); }, 5000);

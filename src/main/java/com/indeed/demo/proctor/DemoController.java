@@ -14,6 +14,7 @@ import com.indeed.proctor.common.*;
 import com.indeed.proctor.common.model.*;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 import com.indeed.web.useragents.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,23 @@ public class DemoController {
         return groups;
     }
 
+    private String getGreetingFromResult(
+            @Nonnull final HttpServletRequest request,
+            @Nonnull final HttpServletResponse response,
+            @Nonnull String userId,
+            @Nonnull String definitionUrl,
+            @Nullable UserAgent userAgent) {
+        final Proctor proctor = definitionManager.load(definitionUrl, false);
+        final Identifiers identifiers = new Identifiers(TestType.USER, userId);
+        final ProctorResult result = proctor.determineTestGroups(identifiers, java.util.Collections.singletonMap("userAgent", userAgent), java.util.Collections.emptyMap());
+        final TestBucket bucket = result.getBuckets().get("greetingtst");
+        if (bucket != null && bucket.getPayload() != null && bucket.getPayload().getMap() != null) {
+            Object greeting = bucket.getPayload().getMap().get("greeting");
+            return greeting != null ? greeting.toString() : "";
+        }
+        return "";
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView handle(@Nonnull final HttpServletRequest request,
             @Nonnull final HttpServletResponse response,
@@ -79,13 +97,14 @@ public class DemoController {
         System.out.println("Using definition URL: " + defn);
         final ProctorGroups groups = getProctorGroups(request, response, userId, defn, userAgent);
         
-        // Load second definition if provided
-        ProctorGroups groups2 = null;
+        // Load second definition if provided (for greeting)
+        String greeting = "";
         if (definitionUrl2 != null && !definitionUrl2.isEmpty()) {
             System.out.println("Using definition URL 2: " + definitionUrl2);
-            groups2 = getProctorGroups(request, response, userId, definitionUrl2, userAgent);
+            greeting = getGreetingFromResult(request, response, userId, definitionUrl2, userAgent);
+            System.out.println("Greeting: " + greeting);
         }
         
-        return new ModelAndView("demo", ImmutableMap.of("groups", groups, "groups2", groups2 != null ? groups2 : groups));
+        return new ModelAndView("demo", ImmutableMap.of("groups", groups, "greeting", greeting));
     }
 }

@@ -35,8 +35,8 @@
 <body>
     <div class="container">
 <c:choose>
-            <c:when test="${not empty groups2.greetingtstPayload and not empty groups2.greetingtstPayload.greeting}">
-        <h1>${groups2.greetingtstPayload.greeting}, this is an AB Testing Demo!</h1>
+            <c:when test="${not empty greeting}">
+        <h1>${greeting}, this is an AB Testing Demo!</h1>
             </c:when>
             <c:otherwise>
         <h1>Welcome, this is an AB Testing Demo!</h1>

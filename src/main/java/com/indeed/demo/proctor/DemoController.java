@@ -64,6 +64,7 @@ public class DemoController {
         }
         final UserAgent userAgent = UserAgent.parseUserAgentStringSafely(userAgentHeader);
         final String defn = (definitionUrl != null && !definitionUrl.isEmpty()) ? definitionUrl : DEFAULT_DEFINITION;
+        System.out.println("Using definition URL: " + defn);
         final ProctorGroups groups = getProctorGroups(request, response, userId, defn, userAgent);
         return new ModelAndView("demo", ImmutableMap.of("groups", groups));
     }

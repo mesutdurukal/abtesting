@@ -63,6 +63,8 @@ public class DemoController {
             response.addCookie(new Cookie(USER_ID_COOKIE, userId));
         }
         final UserAgent userAgent = UserAgent.parseUserAgentStringSafely(userAgentHeader);
+        System.out.println("User-Agent: " + userAgentHeader);
+        System.out.println("isIOS: " + userAgent.isIOS() + ", isAndroid: " + userAgent.isAndroid() + ", isMobile: " + userAgent.isMobileDevice());
         final String defn = (definitionUrl != null && !definitionUrl.isEmpty()) ? definitionUrl : DEFAULT_DEFINITION;
         System.out.println("Using definition URL: " + defn);
         final ProctorGroups groups = getProctorGroups(request, response, userId, defn, userAgent);

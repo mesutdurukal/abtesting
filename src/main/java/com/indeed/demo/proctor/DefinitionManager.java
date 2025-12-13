@@ -1,13 +1,9 @@
 package com.indeed.demo.proctor;
 
 import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -18,12 +14,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.google.common.collect.Maps;
-import com.indeed.demo.ProctorGroups;
 import com.indeed.proctor.common.Proctor;
 import com.indeed.proctor.common.ProctorSpecification;
 import com.indeed.proctor.common.ProctorUtils;
 import com.indeed.proctor.common.StringProctorLoader;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Component;
@@ -85,6 +79,20 @@ public class DefinitionManager {
         } catch (Exception e) {
             System.err.println("Failed to disable caching");
             e.printStackTrace(System.err);
+        }
+    }
+
+    public String loadRawJson(String definitionUrl) {
+        disableHttpCache(definitionUrl);
+        try {
+            HttpURLConnection.setFollowRedirects(true);
+            URL url = new URL(definitionUrl + "?r=" + random.nextInt());
+            try (InputStream is = url.openStream(); Scanner scanner = new Scanner(is, "UTF-8")) {
+                return scanner.useDelimiter("\\A").next();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to load raw JSON from " + definitionUrl, e);
+            return null;
         }
     }
 

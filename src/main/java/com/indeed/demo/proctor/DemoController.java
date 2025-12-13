@@ -14,7 +14,8 @@ import com.indeed.proctor.common.*;
 import com.indeed.proctor.common.model.*;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.indeed.web.useragents.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,19 +55,46 @@ public class DemoController {
         return groups;
     }
 
-    private String getGreetingFromResult(
-            @Nonnull final HttpServletRequest request,
-            @Nonnull final HttpServletResponse response,
+    private String getGreetingFromDefinition(
             @Nonnull String userId,
-            @Nonnull String definitionUrl,
-            @Nullable UserAgent userAgent) {
-        final Proctor proctor = definitionManager.load(definitionUrl, false);
-        final Identifiers identifiers = new Identifiers(TestType.USER, userId);
-        final ProctorResult result = proctor.determineTestGroups(identifiers, java.util.Collections.singletonMap("userAgent", userAgent), java.util.Collections.emptyMap());
-        final TestBucket bucket = result.getBuckets().get("greetingtst");
-        if (bucket != null && bucket.getPayload() != null && bucket.getPayload().getMap() != null) {
-            Object greeting = bucket.getPayload().getMap().get("greeting");
-            return greeting != null ? greeting.toString() : "";
+            @Nonnull String definitionUrl) {
+        try {
+            String json = definitionManager.loadRawJson(definitionUrl);
+            if (json == null) return "";
+            
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(json);
+            JsonNode greetingTest = root.path("tests").path("greetingtst");
+            if (greetingTest.isMissingNode()) return "";
+            
+            String salt = greetingTest.path("salt").asText("greetingtst");
+            JsonNode buckets = greetingTest.path("buckets");
+            JsonNode allocations = greetingTest.path("allocations").get(0).path("ranges");
+            
+            // Hash userId with salt to get bucket position (0.0 to 1.0)
+            int hash = (userId + salt).hashCode();
+            double position = (double) (hash & 0x7FFFFFFF) / Integer.MAX_VALUE;
+            
+            // Find bucket based on allocation ranges
+            double cumulative = 0.0;
+            int bucketValue = -1;
+            for (JsonNode range : allocations) {
+                cumulative += range.path("length").asDouble();
+                if (position < cumulative) {
+                    bucketValue = range.path("bucketValue").asInt();
+                    break;
+                }
+            }
+            
+            // Find greeting for bucket
+            for (JsonNode bucket : buckets) {
+                if (bucket.path("value").asInt() == bucketValue) {
+                    return bucket.path("payload").path("map").path("greeting").asText("");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting greeting: " + e.getMessage());
+            e.printStackTrace();
         }
         return "";
     }
@@ -101,7 +129,7 @@ public class DemoController {
         String greeting = "";
         if (definitionUrl2 != null && !definitionUrl2.isEmpty()) {
             System.out.println("Using definition URL 2: " + definitionUrl2);
-            greeting = getGreetingFromResult(request, response, userId, definitionUrl2, userAgent);
+            greeting = getGreetingFromDefinition(userId, definitionUrl2);
             System.out.println("Greeting: " + greeting);
         }
         

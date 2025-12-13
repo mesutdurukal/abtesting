@@ -33,7 +33,6 @@ public class DemoController {
     private static final String USER_AGENT_HEADER = "User-Agent";
     private static final String DEFAULT_DEFINITION = "https://gist.githubusercontent.com/mesutdurukal/343755729c7ddedee28b49f3c22d7917/raw";
     private static final String PLATFORM_DEFINITION = "https://gist.githubusercontent.com/mesutdurukal/bd424fa4cfc069010882791004beb9d8/raw";
-    private static final String GREETING_DEFINITION = "/defn/greetingTest.json";
 
     @Autowired
     protected DefinitionManager definitionManager;

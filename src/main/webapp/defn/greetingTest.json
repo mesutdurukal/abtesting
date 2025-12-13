@@ -39,6 +39,8 @@
         "ranges" : [
           {"length" : 0, "bucketValue" : -1},
           {"length" : 0.5, "bucketValue" : 0},
+          {"length" : 0, "bucketValue" : -1},
+          {"length" : 0, "bucketValue" : -1},
           {"length" : 0.5, "bucketValue" : 1}
         ]
       } ],

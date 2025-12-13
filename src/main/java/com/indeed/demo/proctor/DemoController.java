@@ -32,6 +32,7 @@ public class DemoController {
     private static final String USER_ID_COOKIE = "UserId";
     private static final String USER_AGENT_HEADER = "User-Agent";
     private static final String DEFAULT_DEFINITION = "https://gist.githubusercontent.com/mesutdurukal/343755729c7ddedee28b49f3c22d7917/raw";
+    private static final String PLATFORM_DEFINITION = "https://gist.githubusercontent.com/mesutdurukal/bd424fa4cfc069010882791004beb9d8/raw";
 
     @Autowired
     protected DefinitionManager definitionManager;
@@ -57,7 +58,8 @@ public class DemoController {
             @Nonnull final HttpServletResponse response,
             @Nullable @CookieValue(required = false, value = USER_ID_COOKIE) String userId,
             @Nullable @RequestHeader(required = false, value = USER_AGENT_HEADER) String userAgentHeader,
-            @Nullable @RequestParam(required = false, value = "defn") String definitionUrl) {
+            @Nullable @RequestParam(required = false, value = "defn") String definitionUrl,
+            @RequestParam(required = false, value = "mydevice") String mydevice) {
         if (userId == null) {
             userId = UUID.randomUUID().toString();
             response.addCookie(new Cookie(USER_ID_COOKIE, userId));
@@ -65,7 +67,14 @@ public class DemoController {
         final UserAgent userAgent = UserAgent.parseUserAgentStringSafely(userAgentHeader);
         System.out.println("User-Agent: " + userAgentHeader);
         System.out.println("isIOS: " + userAgent.isIOS() + ", isAndroid: " + userAgent.isAndroid() + ", isMobile: " + userAgent.isMobileDevice());
-        final String defn = (definitionUrl != null && !definitionUrl.isEmpty()) ? definitionUrl : DEFAULT_DEFINITION;
+        String defn;
+        if (mydevice != null) {
+            defn = PLATFORM_DEFINITION;
+        } else if (definitionUrl != null && !definitionUrl.isEmpty()) {
+            defn = definitionUrl;
+        } else {
+            defn = DEFAULT_DEFINITION;
+        }
         System.out.println("Using definition URL: " + defn);
         final ProctorGroups groups = getProctorGroups(request, response, userId, defn, userAgent);
         return new ModelAndView("demo", ImmutableMap.of("groups", groups));

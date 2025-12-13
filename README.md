@@ -15,7 +15,7 @@ Right now it is using [this](https://gist.github.com/mesutdurukal/343755729c7dde
 
 1. Using `prforceGroups` to see a different test group, regardless of allocations: [link](https://abtesting-79wy.onrender.com/?prforceGroups=bgcolortst3)
 
-1. Basing color on Android vs. iOS user agent instead of random allocation: [link](https://abtesting-79wy.onrender.com/?defn=https://gist.githubusercontent.com/mesutdurukal/bd424fa4cfc069010882791004beb9d8/raw). If you're not on Android or iOS you won't see a background color.
+1. Basing color on Android vs. iOS user agent instead of random allocation: [link](https://abtesting-79wy.onrender.com/?mydevice) which indeed goes to [link](https://abtesting-79wy.onrender.com/?defn=https://gist.githubusercontent.com/mesutdurukal/bd424fa4cfc069010882791004beb9d8/raw). If you're not on Android or iOS you won't see a background color.
 
 ## Building and Running Demo Locally
 
